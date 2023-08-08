@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { PRODUCT_CARD } from '../locator/locator';
 import { PRODUCT_FISRT, PRODUCT_SECOND } from '../locator/mock-data';
 
-test.use({ storageState: 'storageState.json' });
+
 test.beforeEach(async ({ page }) => {
   // Go to the Home page
   await page.goto('https://web-demo.qahive.com/product-list');
