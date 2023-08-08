@@ -1,0 +1,15 @@
+{
+  "cookies": [
+    {
+      "name": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGJmNjAyZGMwNTQzMDdlMTlhYTY1MTQiLCJpYXQiOjE2OTE0NzQ2NDYsImV4cCI6MTY5MTU2MTA0Nn0.cB2ImmRV4Bf7bCiHZzVYJ0HIfeuBTXut6WVaz2nnkFs",
+      "domain": "web-demo.qahive.com",
+      "path": "/",
+      "expires": 1691561046.251069,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}
