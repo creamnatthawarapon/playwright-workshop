@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { PRODUCT_CARD } from '../locator/locator';
-
+import { PRODUCT_FISRT, PRODUCT_SECOND } from '../locator/mock-data';
 
 test.use({ storageState: 'storageState.json' });
 test.beforeEach(async ({ page }) => {
@@ -10,38 +10,20 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('customer able to see product information', async ({ page }) => {
-  const expectedProduct = {
-    name: 'Travel Bag',
-    description: 'A big bag is a general term used to describe a large-sized bag or tote that provides ample storage space for carrying various items.',
-    price: '3000',
-    imageUrl: '/static/media/1.c2116c2b714f83257962.png',
-  };
   // Assertion product image 
-  await expect(page.locator(PRODUCT_CARD.PRODUCT_IMAGE).first()).toHaveAttribute('src', `${expectedProduct.imageUrl}`)
+  await expect(page.locator(PRODUCT_CARD.PRODUCT_IMAGE).first()).toHaveAttribute('src', `${PRODUCT_FISRT.IMAGE_URL}`)
   // Assertion product name 
-  await expect(page.locator(PRODUCT_CARD.PRODUCT_NAME).first()).toHaveText(`${expectedProduct.name}`);
+  await expect(page.locator(PRODUCT_CARD.PRODUCT_NAME).first()).toHaveText(`${PRODUCT_FISRT.NAME}`);
   // Assertion product price 
-  await expect(page.locator(PRODUCT_CARD.PRODUCT_PRICE).first()).toHaveText(`Price: ${expectedProduct.price} THB`);
+  await expect(page.locator(PRODUCT_CARD.PRODUCT_PRICE).first()).toHaveText(`Price: ${PRODUCT_FISRT.PRICE} THB`);
   // Assertion product short description 
-  await expect(page.locator(PRODUCT_CARD.PRODUCT_DESCRIPTION).nth(1)).toHaveText(`${expectedProduct.description}`);
+  await expect(page.locator(PRODUCT_CARD.PRODUCT_DESCRIPTION).nth(1)).toHaveText(`${PRODUCT_FISRT.DESCRIPTION}`);
   // Assertion product can click 
   await expect(page.locator(PRODUCT_CARD.ADD_TO_CART_BUTTON).first()).toBeEnabled();
 });
 
-test('customer able to add product to cart', async ({ page }) => {
-  const productFirst = {
-    name: 'Travel Bag',
-    description: 'A big bag is a general term used to describe a large-sized bag or tote that provides ample storage space for carrying various items.',
-    price: '3000',
-    imageUrl: '/static/media/1.c2116c2b714f83257962.png',
-  };
-  const productSecond = {
-    name: 'Apple Watch',
-    description: 'Apple Watch is a popular wearable device developed and sold by Apple Inc. It was first introduced in 2015, primarily women men.',
-    price: '12500',
-    imageUrl: '/static/media/2.33b94cb35c0245715553.png"',
-  };
-  const productTotalPrice= Number(productFirst.price)+Number(productSecond.price);
+test('customer able to add 2 products to cart', async ({ page }) => {
+  const productTotalPrice = Number(PRODUCT_FISRT.PRICE) + Number(PRODUCT_SECOND.PRICE);
   // Add 1st product to cart 
   await page.locator(PRODUCT_CARD.ADD_TO_CART_BUTTON).nth(0).click();
   // Add 2nd product to cart 
@@ -49,18 +31,45 @@ test('customer able to add product to cart', async ({ page }) => {
   // Go to cart page 
   await page.getByRole('link', { name: '(2)' }).click();
   // Assertion name 1st product 
-  await expect(page.getByRole('heading', { name: 'Travel Bag' })).toHaveText(`${productFirst.name}`);
+  await expect(page.getByRole('heading', { name: 'Travel Bag' })).toHaveText(`${PRODUCT_FISRT.NAME}`);
   // Assertion price in line 1st product 
-  await expect(page.getByRole('heading', { name: '3000' })).toHaveText(`${productFirst.price}`);
+  await expect(page.getByRole('heading', { name: '3000' })).toHaveText(`${PRODUCT_FISRT.PRICE}`);
   // Assertion name 2nd product 
-  await expect(page.getByRole('heading', { name: 'Apple Watch' })).toHaveText(`${productSecond.name}`);
+  await expect(page.getByRole('heading', { name: 'Apple Watch' })).toHaveText(`${PRODUCT_SECOND.NAME}`);
   // Assertion price in line 2nd product 
-  await expect(page.getByRole('heading', { name: '12500' })).toHaveText(`${productSecond.price}`);
+  await expect(page.getByRole('heading', { name: '12500' })).toHaveText(`${PRODUCT_SECOND.PRICE}`);
   // Assertion total quantity products
   await expect(page.getByText('You have 2 items in your cart')).toContainText('2');
   // Assertion total price products
   await expect(page.getByText('15500')).toHaveText(`${productTotalPrice}`)
 });
 
-
-
+test('customer able to adjust cart', async ({ page }) => {
+  let productFristTotalPrice = (Number(PRODUCT_FISRT.PRICE) * 2);
+  let productSecondTotalPrice = (Number(PRODUCT_SECOND.PRICE) * 2);
+  const productTotalPrice = productFristTotalPrice + productSecondTotalPrice;
+  // Add 1st product to cart 
+  await page.locator(PRODUCT_CARD.ADD_TO_CART_BUTTON).nth(0).click();
+  // Add 2nd product to cart 
+  await page.locator(PRODUCT_CARD.ADD_TO_CART_BUTTON).nth(1).click();
+  // Go to cart page 
+  await page.getByRole('link', { name: '(2)' }).click();
+  await page.getByRole('link', { name: ' Continue shopping' }).click();
+  // Add 1st product to cart 
+  await page.locator(PRODUCT_CARD.ADD_TO_CART_BUTTON).nth(0).click();
+  // Add 2nd product to cart 
+  await page.locator(PRODUCT_CARD.ADD_TO_CART_BUTTON).nth(1).click();
+  await page.getByRole('link', { name: '(4)' }).click();
+  // Assertion name 1st product 
+  await expect(page.getByRole('heading', { name: 'Travel Bag' })).toHaveText(`${PRODUCT_FISRT.NAME}`);
+  // Assertion price in line 1st product 
+  await expect(page.getByRole('heading', { name: '3000' })).toHaveText(`${PRODUCT_FISRT.PRICE}`);
+  // Assertion name 2nd product 
+  await expect(page.getByRole('heading', { name: 'Apple Watch' })).toHaveText(`${PRODUCT_SECOND.NAME}`);
+  // Assertion price in line 2nd product 
+  await expect(page.getByRole('heading', { name: '12500' })).toHaveText(`${PRODUCT_SECOND.PRICE}`);
+  // Assertion total quantity products
+  await expect(page.getByText('You have 4 items in your cart')).toContainText('4');
+  // Assertion total price products
+  await expect(page.getByText('31000')).toHaveText(`${productTotalPrice}`)
+});
