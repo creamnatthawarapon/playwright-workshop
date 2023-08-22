@@ -40,6 +40,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'],
       storageState: 'playwright/.auth/user.json' },
       dependencies: ['setup'],
+      fullyParallel: true,
     },
 
     {
@@ -47,6 +48,7 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'],
       storageState: 'playwright/.auth/user.json' },
       dependencies: ['setup'],
+      fullyParallel: true,
     },
 
     {
@@ -54,6 +56,7 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'],
       storageState: 'playwright/.auth/user.json' },
       dependencies: ['setup'],
+      fullyParallel: true,
     },
 
     /* Test against mobile viewports. */
